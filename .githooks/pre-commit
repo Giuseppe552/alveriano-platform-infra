@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Block secrets before they enter git history.
+# Keep it simple + fast: scan staged changes only.
+
+RED='\033[0;31m'
+NC='\033[0m'
+
+fail() {
+  echo -e "${RED}BLOCKED:${NC} $1" >&2
+  exit 1
+}
+
+# Get staged file list
+STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACM)"
+
+# Hard-block file types that should never be committed
+echo "$STAGED_FILES" | grep -E '(^|/)\.env(\.|$)|(^|/).*\.tfstate(\.|$)|(^|/)secrets\.auto\.tfvars$' >/dev/null 2>&1 && \
+  fail "Attempted to commit a secrets/env/state file (.env*, *.tfstate*, secrets.auto.tfvars). Remove it from staging."
+
+# Scan staged diffs for secret patterns
+DIFF_TEXT="$(git diff --cached -U0)"
+
+# Common high-risk patterns (keep conservative; avoids false positives but catches real leaks)
+PATTERNS=(
+  # Stripe keys
+  'sk_live_[0-9a-zA-Z]{16,}'
+  'sk_test_[0-9a-zA-Z]{16,}'
+  'rk_live_[0-9a-zA-Z]{16,}'
+  'rk_test_[0-9a-zA-Z]{16,}'
+  'whsec_[0-9a-zA-Z]{16,}'
+
+  # AWS access keys
+  'AKIA[0-9A-Z]{16}'
+  'ASIA[0-9A-Z]{16}'
+
+  # Common “service role” style tokens (Supabase often appears as service_role or similar)
+  '(SUPABASE_SERVICE_ROLE_KEY|SERVICE_ROLE_KEY)\s*[:=]\s*["'\''][^"'\''[:space:]]{20,}["'\'']'
+
+  # Generic private key block
+  '-----BEGIN (RSA |EC |OPENSSH |)PRIVATE KEY-----'
+)
+
+for pat in "${PATTERNS[@]}"; do
+  if echo "$DIFF_TEXT" | grep -E "$pat" >/dev/null 2>&1; then
+    fail "Secret pattern detected in staged changes. Remove the secret and rotate the credential if it was real."
+  fi
+done
+
+echo "pre-commit: OK"
+exit 0
