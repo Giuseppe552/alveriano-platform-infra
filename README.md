@@ -1,8 +1,8 @@
-````md
 # Alveriano Platform — Infrastructure (Terraform)
 
-Terraform infrastructure for the Alveriano Platform API.  
-This repo exists so I can manage real cloud resources with repeatable practices (state, locking, environments, safe secrets), while powering multiple live websites.
+Terraform infrastructure for the Alveriano Platform API.
+
+I use this repo to keep cloud resources repeatable and safe (remote state + locking, clear env config, and secrets hygiene), while powering multiple live websites.
 
 ## What this runs
 - AWS Lambda (Node.js 20) for the platform API
@@ -10,7 +10,7 @@ This repo exists so I can manage real cloud resources with repeatable practices 
 - CloudWatch Logs for Lambda (retention configured)
 - Terraform remote state in S3 + locking in DynamoDB
 
-The API reads Supabase + Stripe configuration via environment variables set by Terraform.
+The Lambda environment is configured from Terraform variables (Supabase + Stripe).
 
 ## Used by
 - https://resinaro.com
@@ -29,7 +29,7 @@ The API reads Supabase + Stripe configuration via environment variables set by T
 ## Prerequisites
 - Terraform `>= 1.8.0`
 - AWS account access in `eu-west-2` (London)
-- AWS CLI configured (prefer role-based access + MFA)
+- AWS CLI configured (role-based access + MFA preferred)
 
 This repo packages the API from a sibling folder:
 - `../alveriano-platform-api`
@@ -101,6 +101,16 @@ terraform plan
 terraform apply
 ```
 
+## Local safety checks (recommended)
+
+This repo includes a pre-commit hook that blocks common secret patterns from being committed.
+
+Enable it after cloning:
+
+```bash
+git config core.hooksPath .githooks
+```
+
 ## Notes
 
 * `.terraform.lock.hcl` is committed for reproducible provider resolution.
@@ -115,5 +125,3 @@ terraform apply
 * CloudWatch alarms for errors/throttles
 * Simple runbook for deploy/rollback/diagnostics
 
-```
-```
