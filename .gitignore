@@ -1,0 +1,91 @@
+########################################
+# Terraform (state + local cache)
+########################################
+**/.terraform/
+**/.terraform.lock.hcl.d/
+**/*.tfstate
+**/*.tfstate.*
+**/crash.log
+**/crash.*.log
+
+# Local override files (often contain secrets)
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+
+# tfvars (NEVER commit secrets)
+**/*.tfvars
+**/*.tfvars.json
+**/*.auto.tfvars
+**/*.auto.tfvars.json
+
+########################################
+# Secrets / env (bulletproof)
+########################################
+# dotenv
+**/.env
+**/.env.*
+**/*.env
+**/*.env.*
+
+# common local config names that often contain secrets
+**/*secret*
+**/*secrets*
+**/*credentials*
+**/*creds*
+**/*apikey*
+**/*api_key*
+**/*token*
+**/*private*
+**/*passwd*
+**/*password*
+**/*key*
+**/*cert*
+
+# common secret file types
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.crt
+**/*.cer
+**/*.csr
+**/*.der
+**/*.keystore
+**/*.jks
+
+# cloud / ssh local dirs (never commit)
+**/.aws/
+**/.ssh/
+**/.gnupg/
+
+########################################
+# Node / Next / builds
+########################################
+**/node_modules/
+**/.next/
+**/dist/
+**/out/
+**/build/
+**/.build/
+**/*.zip
+**/*.tgz
+**/*.log
+
+########################################
+# OS / editor
+########################################
+.DS_Store
+Thumbs.db
+**/.vscode/
+**/.idea/
+*~
+
+########################################
+# Backups / temp
+########################################
+*.bak
+*.backup
+*.swp
+*.swo
