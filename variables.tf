@@ -67,3 +67,20 @@ variable "stripe_webhook_secret" {
     error_message = "stripe_webhook_secret must not be empty."
   }
 }
+
+########################################
+# Resinaro CRM sync (platform -> resinaro.com)
+########################################
+
+variable "resinaro_crm_webhook_url" {
+  description = "Resinaro CRM webhook URL (e.g. https://www.resinaro.com/api/platform/payment-succeeded)"
+  type        = string
+  default     = ""
+}
+
+variable "resinaro_crm_webhook_secret" {
+  description = "Shared secret for platform->Resinaro CRM webhook (Bearer token)"
+  type        = string
+  sensitive   = true
+  default     = ""
+}

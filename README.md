@@ -76,6 +76,10 @@ supabase_service_role_key = "YOUR_SUPABASE_SERVICE_ROLE_KEY"
 
 stripe_secret_key         = "YOUR_STRIPE_SECRET_KEY"
 stripe_webhook_secret     = "YOUR_STRIPE_WEBHOOK_SECRET"
+
+# Optional but recommended: sync successful payments into resinaro.com CRM
+resinaro_crm_webhook_url    = "https://www.resinaro.com/api/platform/payment-succeeded"
+resinaro_crm_webhook_secret = "YOUR_SHARED_WEBHOOK_SECRET"
 ```
 
 ## Deploy workflow

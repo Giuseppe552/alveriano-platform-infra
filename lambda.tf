@@ -169,6 +169,10 @@ resource "aws_lambda_function" "api" {
       # Recommended: webhook code often validates this at import or on route hit
       STRIPE_WEBHOOK_SECRET = var.stripe_webhook_secret
 
+      # Platform -> Resinaro CRM sync (optional but recommended)
+      RESINARO_CRM_WEBHOOK_URL    = var.resinaro_crm_webhook_url
+      RESINARO_CRM_WEBHOOK_SECRET = var.resinaro_crm_webhook_secret
+
       # Present for future migration to runtime-secret loading (NOT used by your code yet)
       CONFIG_SECRET_ARN    = aws_secretsmanager_secret.api_config.arn
       CONFIG_SECRET_REGION = data.aws_region.current.name
