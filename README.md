@@ -87,6 +87,7 @@ From `../alveriano-platform-api`:
 ```bash
 npm ci
 npm run build
+npm run build:lambda
 ```
 
 ### 2) Plan and apply infra
@@ -124,4 +125,3 @@ git config core.hooksPath .githooks
 * OIDC (GitHub → AWS) to avoid long-lived AWS keys in GitHub
 * CloudWatch alarms for errors/throttles
 * Simple runbook for deploy/rollback/diagnostics
-
